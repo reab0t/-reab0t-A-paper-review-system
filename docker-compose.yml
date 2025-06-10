@@ -1,0 +1,219 @@
+version: '3.8'
+
+services:
+  # 服务注册中心 Eureka Server
+  # 用于服务发现和注册，所有微服务都需要注册到这里
+  eureka-server:
+    build: 
+      context: ./backend/eureka-server  # 构建上下文目录
+      dockerfile: Dockerfile            # 使用的 Dockerfile
+    ports:
+      - "8761:8761"                    # 端口映射，用于访问 Eureka 控制台
+    networks:
+      - paper-review-network           # 加入自定义网络
+
+  # 配置中心 Spring Cloud Config
+  # 统一管理所有微服务的配置文件
+  config-server:
+    build:
+      context: ./backend/config-server
+      dockerfile: Dockerfile
+    ports:
+      - "8888:8888"                    # 配置中心端口
+    depends_on:
+      - eureka-server                  # 依赖于 eureka-server，需要等待其启动
+    networks:
+      - paper-review-network
+
+  # API 网关服务 Spring Cloud Gateway
+  # 统一的API入口，负责请求路由、负载均衡、认证授权等
+  gateway-service:
+    build:
+      context: ./backend/gateway
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"                    # 网关对外暴露的端口
+    depends_on:
+      - eureka-server
+      - config-server
+    networks:
+      - paper-review-network
+
+  # 用户服务：处理用户注册、登录、权限管理等功能
+  user-service:
+    build:
+      context: ./backend/user-service
+      dockerfile: Dockerfile
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - JAVA_OPTS=-Xmx512m -Xms256m
+    depends_on:
+      - mysql                          # 依赖 MySQL 数据库
+      - redis                          # 依赖 Redis 缓存
+      - eureka-server                  # 依赖服务注册中心
+      - rabbitmq                       # 依赖消息队列
+    networks:
+      - paper-review-network
+
+  # 论文服务：处理论文上传、存储、检索等功能
+  paper-service:
+    build:
+      context: ./backend/paper-service
+      dockerfile: Dockerfile
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - JAVA_OPTS=-Xmx512m -Xms256m
+    depends_on:
+      - mysql                          # 论文元数据存储
+      - redis                          # 论文缓存
+      - eureka-server
+      - minio                          # MinIO文件存储服务
+    networks:
+      - paper-review-network
+
+  # 评审服务：处理论文评审流程、评分、评审意见等功能
+  review-service:
+    build:
+      context: ./backend/review-service
+      dockerfile: Dockerfile
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - JAVA_OPTS=-Xmx512m -Xms256m
+    depends_on:
+      - mysql                          # 评审数据存储
+      - redis                          # 评审流程缓存
+      - eureka-server
+      - rabbitmq                       # 消息通知
+    networks:
+      - paper-review-network
+
+  # MySQL 数据库服务
+  mysql:
+    image: mysql:8.0                   # 使用 MySQL 8.0 版本镜像
+    environment:
+      MYSQL_ROOT_PASSWORD: root        # 数据库 root 用户密码
+      MYSQL_DATABASE: paper_review     # 默认创建的数据库名
+    ports:
+      - "3306:3306"                    # MySQL 默认端口映射
+    volumes:
+      - mysql-data:/var/lib/mysql      # 数据持久化存储
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql  # 初始化脚本
+    networks:
+      - paper-review-network
+
+  # Redis 缓存服务
+  redis:
+    image: redis:6.2                   # 使用 Redis 6.2 版本镜像
+    ports:
+      - "6379:6379"                    # Redis 默认端口映射
+    volumes:
+      - redis-data:/data               # Redis 数据持久化
+    networks:
+      - paper-review-network
+
+  # RabbitMQ 消息队列服务
+  rabbitmq:
+    image: rabbitmq:3.9-management     # 使用带管理界面的 RabbitMQ
+    ports:
+      - "5672:5672"                    # AMQP 端口
+      - "15672:15672"                  # 管理界面端口
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    networks:
+      - paper-review-network
+
+  # MinIO 对象存储服务
+  minio:
+    image: minio/minio
+    ports:
+      - "9000:9000"                    # API 端口
+      - "9001:9001"                    # Console 端口
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    volumes:
+      - minio-data:/data
+    command: server /data --console-address ":9001"
+    networks:
+      - paper-review-network
+
+  # ELK 日志收集和分析
+  elasticsearch:
+    image: elasticsearch:7.17.9
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ports:
+      - "9200:9200"
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    networks:
+      - paper-review-network
+
+  logstash:
+    image: logstash:7.17.9
+    volumes:
+      - ./config/logstash/:/usr/share/logstash/pipeline/
+    depends_on:
+      - elasticsearch
+    networks:
+      - paper-review-network
+
+  kibana:
+    image: kibana:7.17.9
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+    networks:
+      - paper-review-network
+
+  # Prometheus 监控
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./config/prometheus/:/etc/prometheus/
+      - prometheus-data:/prometheus
+    networks:
+      - paper-review-network
+
+  # Grafana 监控面板
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+    volumes:
+      - grafana-data:/var/lib/grafana
+    networks:
+      - paper-review-network
+
+  # 前端服务 Vue 3
+  frontend:
+    build:
+      context: ./frontend              # 前端项目目录
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"                        # 前端服务端口映射
+    depends_on:
+      - gateway-service                # 依赖网关服务
+    networks:
+      - paper-review-network
+
+# 自定义网络配置
+networks:
+  paper-review-network:                # 创建名为 paper-review-network 的网络
+    driver: bridge                     # 使用 bridge 驱动，用于容器间通信
+
+# 数据卷配置
+volumes:
+  mysql-data:                          # MySQL 数据持久化卷
+  redis-data:                          # Redis 数据持久化卷
+  rabbitmq-data:                       # RabbitMQ 数据持久化卷
+  minio-data:                         # MinIO 数据持久化卷
+  elasticsearch-data:                  # Elasticsearch 数据持久化卷
+  prometheus-data:                    # Prometheus 数据持久化卷
+  grafana-data:                       # Grafana 数据持久化卷 
