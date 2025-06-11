@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>论文评审系统</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+        nav {
+            display: flex;
+            justify-content: space-around;
+            background-color: #0056b3;
+            padding: 10px 0;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+        }
+        nav a:hover {
+            background-color: #004494;
+        }
+        section {
+            margin: 20px 0;
+            padding: 20px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        footer {
+            text-align: center;
+            padding: 10px 0;
+            background-color: #007BFF;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>论文评审系统</h1>
+</header>
+<nav>
+    <a href="#home">首页</a>
+    <a href="#papers">论文列表</a>
+    <a href="#review">评审</a>
+    <a href="#about">关于我们</a>
+</nav>
+<div class="container">
+    <section id="home">
+        <h2>欢迎来到论文评审系统</h2>
+        <p>这是一个简单的论文评审系统，用于帮助研究人员和管理员高效地评审论文。</p>
+    </section>
+    <section id="papers">
+        <h2>论文列表</h2>
+        <p>这里将展示所有待评审的论文列表。</p>
+        <!-- 这里可以添加论文列表的动态内容 -->
+    </section>
+    <section id="review">
+        <h2>评审</h2>
+        <p>在这里，你可以对论文进行评审并提交你的意见。</p>
+        <!-- 这里可以添加评审表单的动态内容 -->
+    </section>
+    <section id="about">
+        <h2>关于我们</h2>
+        <p>我们是一个致力于提高论文评审效率的团队。</p>
+    </section>
+</div>
+<footer>
+    <p>&copy; 2023 论文评审系统. 保留所有权利。</p>
+</footer>
+<script>
+    // 这里可以添加一些基本的JavaScript交互功能
+    document.querySelectorAll('nav a').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    });
+</script>
+</body>
+</html>
