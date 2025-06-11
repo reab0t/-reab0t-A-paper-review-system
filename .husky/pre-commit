@@ -1,0 +1,19 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# 前端代码检查
+cd frontend && npm run lint && npm run type-check
+
+# 后端代码检查
+cd ../backend && ./mvnw checkstyle:check
+
+# 检查提交消息格式
+commit_msg=$(cat $1)
+commit_pattern="^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\(.+\))?: .{1,50}"
+
+if ! echo "$commit_msg" | grep -qE "$commit_pattern"; then
+    echo "错误: 提交消息不符合规范"
+    echo "格式: type(scope): subject"
+    echo "示例: feat(user): add user login"
+    exit 1
+fi 

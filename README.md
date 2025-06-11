@@ -1,6 +1,13 @@
-# 论文评审系统 (A-Paper Review System)
+# 论文评审系统
 
-基于 Spring Cloud 微服务架构构建的分布式论文评审系统。
+## 项目简介
+论文评审系统是一个基于Spring Cloud微服务架构的论文投稿和评审管理平台。系统支持论文在线投稿、专家分配、在线评审、结果反馈等完整的论文评审流程。
+
+## 项目访问
+- 代码仓库：https://github.com/reab0t/-reab0t-A-paper-review-system
+- 开发环境：https://dev.your-domain.com
+- 测试环境：https://test.your-domain.com
+- 生产环境：https://your-domain.com
 
 ## 项目结构
 
@@ -17,111 +24,299 @@ A-paper-review-system/
 └── docker/                        # Docker 配置文件
 ```
 
-## 技术栈
+## 团队成员与技术栈
+
+### 靳磊（组长）- 架构设计和项目管理
+- **职责**：
+  - 项目整体架构设计
+  - 微服务架构规划
+  - 开发流程管理
+  - 技术选型与决策
+  - CI/CD流程设计
+
+- **技术栈**：
+  - Spring Cloud 微服务架构
+  - Docker容器化部署
+  - GitHub Actions自动化
+  - ELK日志系统
+  - Prometheus + Grafana监控
+
+### 傅依琳 - 前端架构
+- **职责**：
+  - 前端架构设计
+  - 组件库开发
+  - 性能优化
+  - 前端工程化
+  - UI/UX设计
+
+- **技术栈**：
+  - Vue 3.0 + TypeScript
+  - Element Plus
+  - Vite构建工具
+  - Pinia状态管理
+  - Vitest单元测试
+  - Cypress E2E测试
+
+### 赵湄灵 - 认证授权与用户管理
+- **职责**：
+  - 用户认证系统
+  - 权限管理模块
+  - 安全策略实现
+  - 用户服务开发
+  - 数据库设计
+
+- **技术栈**：
+  - Spring Security
+  - JWT认证
+  - MyBatis-Plus
+  - Redis缓存
+  - MySQL数据库
+
+### 王誉晗 - 论文管理与评审
+- **职责**：
+  - 论文管理模块
+  - 评审流程实现
+  - 文件存储服务
+  - API网关开发
+  - 服务集成
+
+- **技术栈**：
+  - Spring Cloud Gateway
+  - MinIO对象存储
+  - RabbitMQ消息队列
+  - JPA持久层
+  - RESTful API设计
+
+### 袁太仙 - 运维和消息通知
+- **职责**：
+  - 系统部署维护
+  - 消息通知系统
+  - 监控告警
+  - 性能优化
+  - 自动化运维
+
+- **技术栈**：
+  - Docker Compose
+  - ELK日志平台
+  - Prometheus监控
+  - RabbitMQ
+  - Shell脚本
+
+## 技术栈详解
 
 ### 后端技术栈
-- Spring Cloud（微服务框架）
-  - Spring Boot（基础框架）
-  - Spring Cloud Gateway（网关服务）
-  - Spring Cloud Netflix（服务注册与发现）
-  - Spring Cloud Config（配置中心）
-- MySQL（关系型数据库）
-- Redis（缓存服务）
-- Maven（项目构建工具）
+```
+Spring Cloud 微服务
+├── Spring Boot 3.2.0（基础框架）
+├── Spring Cloud Gateway（网关服务）
+├── Spring Security + JWT（认证授权）
+├── Spring Cloud Config（配置中心）
+└── Spring Cloud Netflix（服务发现）
+
+数据存储与缓存
+├── MySQL 8.0（关系型数据库）
+├── Redis 6.2（缓存服务）
+├── MinIO（对象存储）
+└── MyBatis-Plus/JPA（ORM框架）
+
+消息与异步
+├── RabbitMQ 3.9（消息队列）
+└── WebSocket（实时通信）
+
+监控与日志
+├── ELK Stack（日志收集）
+├── Prometheus（监控系统）
+└── Grafana（可视化面板）
+```
 
 ### 前端技术栈
-- Vue 3（前端框架）
-- Element Plus（UI组件库）
-- Vite（构建工具）
-- TypeScript（类型安全的 JavaScript）
+```
+核心框架
+├── Vue 3.0
+├── TypeScript
+└── Element Plus
+
+工程化工具
+├── Vite（构建工具）
+├── ESLint（代码检查）
+└── Prettier（代码格式化）
+
+状态管理
+├── Pinia（状态管理）
+└── Vue Router（路由管理）
+
+测试工具
+├── Vitest（单元测试）
+└── Cypress（E2E测试）
+```
 
 ### 运维技术栈
-- Docker（容器化部署）
-- Docker Compose（容器编排）
-- Git（版本控制）
-- Maven（依赖管理）
+```
+容器化部署
+├── Docker
+└── Docker Compose
+
+持续集成/部署
+├── GitHub Actions
+└── Shell Scripts
+
+监控与日志
+├── ELK Stack
+├── Prometheus
+└── Grafana
+
+自动化运维
+├── Ansible
+└── Jenkins
+```
+
+## 系统架构
+
+### 架构图
+```
+                        [Nginx反向代理]
+                              |
+                   [Spring Cloud Gateway]
+                    /         |          \
+        [用户服务]     [论文服务]    [评审服务]
+            |            |             |
+        [MySQL]       [MinIO]      [RabbitMQ]
+            \            |             /
+             ----[Redis缓存服务]----
+                        |
+              [ELK日志收集系统]
+                        |
+            [Prometheus + Grafana监控]
+```
+
+### 模块说明
+- `gateway`: API网关服务
+- `common`: 公共模块
+- `user-service`: 用户服务
+- `paper-service`: 论文服务
+- `review-service`: 评审服务
+
+## 功能特性
+
+### 用户管理
+- [x] 用户注册与登录
+- [x] 角色权限管理
+- [x] 个人信息维护
+
+### 论文管理
+- [x] 在线投稿
+- [x] 论文存储
+- [x] 状态跟踪
+- [x] 修改与撤回
+
+### 评审流程
+- [x] 专家分配
+- [x] 在线评审
+- [x] 意见反馈
+- [x] 结果通知
+
+### 系统管理
+- [x] 评审配置
+- [x] 统计分析
+- [x] 日志审计
+- [x] 系统监控
 
 ## 快速开始
 
 ### 环境要求
-- JDK 21 
-- Maven 3.9.10 
-- Docker 和 Docker Compose
-- Node.js 16 
-- MySQL 8.0 
+- JDK 21（Eclipse Temurin）
+- Maven 3.9.10
+- Node.js 16.x
+- Docker最新稳定版
+- Docker Compose最新稳定版
 
 ### 开发环境搭建
-1. 克隆项目代码：
+
+1. 克隆项目
 ```bash
 git clone https://github.com/reab0t/-reab0t-A-paper-review-system.git
+cd paper-review-system
 ```
 
-2. 构建后端服务：
+2. 后端服务启动
 ```bash
-cd backend
+# 编译项目
 mvn clean install
+
+# 启动服务
+mvn spring-boot:run
 ```
 
-3. 使用 Docker Compose 启动服务：
+3. 前端开发环境
+```bash
+# 安装依赖
+cd frontend
+npm install
+
+# 启动开发服务器
+npm run dev
+```
+
+### 生产环境部署
+
+1. 构建镜像
+```bash
+docker-compose build
+```
+
+2. 启动服务
 ```bash
 docker-compose up -d
 ```
 
-4. 启动前端开发服务器：
-```bash
-cd frontend
-npm install
-npm run dev
-```
+## 项目文档
 
-## 项目管理规范
+- [开发规范](docs/开发规范.md)
+- [API文档](docs/API文档.md)
+- [部署文档](docs/部署文档.md)
+- [贡献指南](docs/贡献指南.md)
 
-### Git 工作流程
-1. 从 develop 分支创建功能分支：
-```bash
-git checkout -b feature/功能名称
-```
+## 开发进度
 
-2. 提交变更：
-```bash
-git add .
-git commit -m "feat: 你的提交信息"
-```
+### 已完成功能
+- [x] 用户认证与授权
+- [x] 论文上传与管理
+- [x] 评审流程管理
+- [x] 消息通知系统
+- [x] 统计分析功能
 
-3. 推送变更并创建 Pull Request 到 develop 分支
+### 开发中功能
+- [ ] 评审专家推荐
+- [ ] 论文查重集成
+- [ ] 移动端适配
+- [ ] 国际化支持
 
-### 分支管理策略
-- `main`: 生产环境分支
-- `develop`: 开发集成分支
-- `feature/*`: 功能开发分支
-- `hotfix/*`: 生产环境紧急修复分支
-- `release/*`: 发布候选分支
+### 计划功能
+- [ ] AI辅助评审
+- [ ] 区块链存证
+- [ ] 实时协作
+- [ ] 知识图谱
 
-### 提交信息规范
-```
-<类型>(<范围>): <主题>
+## 版本历史
 
-<内容描述>
-```
+### v1.0.0 (2024-01-01)
+- 完成基础架构搭建
+- 实现核心业务流程
+- 支持基本评审功能
 
-提交类型说明：
-- feat: 新功能开发
-- fix: 错误修复
-- docs: 文档更新
-- style: 代码格式调整
-- refactor: 代码重构
-- test: 测试相关
-- chore: 构建或工具相关
+### v1.1.0 (进行中)
+- 优化评审流程
+- 增加数据分析
+- 提升系统性能
 
-## 参与贡献
-详细的贡献指南请参考 [CONTRIBUTING.md](CONTRIBUTING.md)
+## 贡献代码
 
-## 团队分工
+1. Fork 项目
+2. 创建功能分支
+3. 提交代码
+4. 发起 Pull Request
 
-| 成员 | 角色 | 职责分工 | 技术重点 |
-|------|------|----------|-----------|
-| 靳磊 | 项目组长 | 项目管理与系统架构设计 | • Spring Cloud 微服务架构设计与治理<br>• Docker容器化部署<br>• Git版本控制<br>• 项目文档管理 |
-| 傅依琳 | 前端架构师 | 前端架构设计与实现 | • Vue 3.0框架<br>• Element Plus UI组件库<br>• TypeScript<br>• Vue Router路由管理<br>• Pinia状态管理<br>• npm包管理 |
-| 赵湄灵 | 核心开发 | 认证授权与用户管理模块 | • Spring Boot 3.2.x<br>• Spring Security安全框架<br>• JWT令牌认证<br>• MyBatis持久层框架<br>• MySQL数据库设计<br>• Redis缓存 |
-| 王誉晗 | 功能开发 | 论文管理与评审模块 | • Spring Boot 3.2.x<br>• Spring Cloud Gateway网关<br>• MyBatis-Plus增强工具<br>• MySQL数据库<br>• MinIO文件存储 |
-| 袁太仙 | 运维开发 | 消息通知与运维支持 | • Spring Boot 3.2.x<br>• WebSocket即时通讯<br>• RabbitMQ消息队列<br>• ELK日志系统<br>• Prometheus监控 |
+详见 [贡献指南](docs/贡献指南.md)
+
+
+
