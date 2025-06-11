@@ -50,7 +50,7 @@
 ## 技术栈
 
 ### 后端技术栈
-- Java 17
+- Java 21
 - Spring Boot
 - Spring Cloud
 - PostgreSQL
