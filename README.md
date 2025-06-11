@@ -4,10 +4,18 @@
 论文评审系统是一个基于Spring Cloud微服务架构的论文投稿和评审管理平台。系统支持论文在线投稿、专家分配、在线评审、结果反馈等完整的论文评审流程。
 
 ## 项目访问
+
 - 代码仓库：https://github.com/reab0t/-reab0t-A-paper-review-system
-- 开发环境：https://dev.your-domain.com
-- 测试环境：https://test.your-domain.com
-- 生产环境：https://your-domain.com
+- 开发环境：https://github.com/reab0t/-reab0t-A-paper-review-system/deployments/Development
+  - 状态：[![Development Status](https://github.com/reab0t/-reab0t-A-paper-review-system/actions/workflows/dev-deploy.yml/badge.svg?branch=develop)](https://github.com/reab0t/-reab0t-A-paper-review-system/actions)
+
+- 测试环境：https://github.com/reab0t/-reab0t-A-paper-review-system/deployments/Testing
+  - 状态：[![Testing Status](https://github.com/reab0t/-reab0t-A-paper-review-system/actions/workflows/test-deploy.yml/badge.svg?branch=test)](https://github.com/reab0t/-reab0t-A-paper-review-system/actions)
+
+- 生产环境：https://github.com/reab0t/-reab0t-A-paper-review-system/deployments/Production
+  - 状态：[![Production Status](https://github.com/reab0t/-reab0t-A-paper-review-system/actions/workflows/prod-deploy.yml/badge.svg?branch=main)](https://github.com/reab0t/-reab0t-A-paper-review-system/actions)
+
+> 注：环境部署状态可在 GitHub Actions 中查看。具体配置请访问仓库的 Settings -> Environments 页面。
 
 ## 项目结构
 
