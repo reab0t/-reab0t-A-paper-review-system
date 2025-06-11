@@ -6,15 +6,15 @@
     
     <!-- 父项目信息 -->
     <parent>
-        <groupId>com.paper.review</groupId>
+        <groupId>com.review</groupId>
         <artifactId>paper-review-system</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.0</version>
     </parent>
 
     <!-- 项目信息 -->
     <artifactId>common</artifactId>
     <name>common</name>
-    <description>公共模块：包含实体类、工具类、通用配置等基础组件</description>
+    <description>Common Library for Paper Review System</description>
 
     <!-- 项目依赖 -->
     <dependencies>
@@ -64,6 +64,13 @@
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
+        </dependency>
+
+        <!-- Lombok：简化开发 -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 </project> 

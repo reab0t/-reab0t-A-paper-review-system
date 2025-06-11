@@ -1,4 +1,74 @@
-# 项目贡献指南
+# Contributing to Paper Review System
+
+We love your input! We want to make contributing to Paper Review System as easy and transparent as possible, whether it's:
+
+- Reporting a bug
+- Discussing the current state of the code
+- Submitting a fix
+- Proposing new features
+- Becoming a maintainer
+
+## Development Process
+
+We use GitHub to host code, to track issues and feature requests, as well as accept pull requests.
+
+1. Fork the repo and create your branch from `main`.
+2. If you've added code that should be tested, add tests.
+3. If you've changed APIs, update the documentation.
+4. Ensure the test suite passes.
+5. Make sure your code lints.
+6. Issue that pull request!
+
+## Pull Request Process
+
+1. Update the README.md with details of changes to the interface, if applicable.
+2. Update the docs/ with any necessary documentation.
+3. The PR may be merged once you have the sign-off of two other developers.
+
+## Code Style Guidelines
+
+### Frontend
+
+- Use TypeScript for all new code
+- Follow Vue 3 Composition API patterns
+- Use async/await for asynchronous operations
+- Write meaningful component and variable names
+- Add comments for complex logic
+- Follow the existing project structure
+
+### Backend
+
+- Follow Java code conventions
+- Write unit tests for new features
+- Use meaningful names for classes and methods
+- Document public APIs
+- Keep methods focused and concise
+- Use dependency injection
+
+## Commit Messages
+
+- Use the present tense ("Add feature" not "Added feature")
+- Use the imperative mood ("Move cursor to..." not "Moves cursor to...")
+- Limit the first line to 72 characters or less
+- Reference issues and pull requests liberally after the first line
+
+## Bug Reports
+
+**Great Bug Reports** tend to have:
+
+- A quick summary and/or background
+- Steps to reproduce
+  - Be specific!
+  - Give sample code if you can
+- What you expected would happen
+- What actually happens
+- Notes (possibly including why you think this might be happening)
+
+## License
+
+By contributing, you agree that your contributions will be licensed under its MIT License.
+
+## 项目贡献指南
 
 ## 团队成员与职责
 

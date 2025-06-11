@@ -1,7 +1,67 @@
 # 论文评审系统
 
-## 项目简介
-论文评审系统是一个基于Spring Cloud微服务架构的论文投稿和评审管理平台。系统支持论文在线投稿、专家分配、在线评审、结果反馈等完整的论文评审流程。
+基于微服务架构的论文投稿和评审管理平台。
+
+## 项目结构
+
+```
+.
+├── backend/                        # 后端服务
+│   ├── common/                    # 公共工具和模型
+│   │   └── src/
+│   │       ├── main/
+│   │       │   ├── java/         # Java源文件
+│   │       │   └── resources/    # 配置文件
+│   ├── paper-service/            # 论文管理服务
+│   │   └── src/
+│   │       ├── main/
+│   │       │   ├── java/
+│   │       │   └── resources/
+│   ├── review-service/           # 评审管理服务
+│   │   └── src/
+│   │       ├── main/
+│   │       │   ├── java/
+│   │       │   └── resources/
+│   └── user-service/             # 用户管理服务
+│       └── src/
+│           ├── main/
+│           │   ├── java/
+│           │   └── resources/
+├── frontend/                      # 前端应用
+│   ├── src/
+│   │   ├── modules/              # 功能模块
+│   │   │   ├── paper/           # 论文管理模块
+│   │   │   │   ├── api.ts       # API调用
+│   │   │   │   ├── store.ts     # 状态管理
+│   │   │   │   └── types.ts     # 类型定义
+│   │   │   └── review/          # 评审管理模块
+│   │   ├── router/              # 路由配置
+│   │   ├── views/               # 视图组件和页面
+│   │   │   ├── papers/         # 论文相关视图
+│   │   │   └── reviews/        # 评审相关视图
+│   │   └── utils/              # 工具函数
+│   └── public/                  # 静态资源
+├── docs/                        # 文档
+│   ├── API.md                  # API文档
+│   └── development.md          # 开发指南
+└── config/                     # 配置文件
+```
+
+## 技术栈
+
+### 后端技术栈
+- Java 17
+- Spring Boot
+- Spring Cloud
+- PostgreSQL
+- Maven
+
+### 前端技术栈
+- Vue 3
+- TypeScript
+- Vite
+- Vue Router
+- Element Plus
 
 ## 项目访问
 
@@ -16,21 +76,6 @@
   - 状态：[![Production Status](https://github.com/reab0t/-reab0t-A-paper-review-system/actions/workflows/prod-deploy.yml/badge.svg?branch=main)](https://github.com/reab0t/-reab0t-A-paper-review-system/actions)
 
 > 注：环境部署状态可在 GitHub Actions 中查看。具体配置请访问仓库的 Settings -> Environments 页面。
-
-## 项目结构
-
-```
-A-paper-review-system/
-├── backend/                        # 后端服务（Maven 多模块工程）
-│   ├── common/                     # 公共模块（实体类、工具类等）
-│   ├── gateway/                    # API 网关服务（Spring Cloud Gateway）
-│   ├── user-service/              # 用户管理服务
-│   ├── paper-service/             # 论文管理服务
-│   └── review-service/            # 评审管理服务
-├── frontend/                       # 前端项目（Vue 3）
-├── db/                            # 数据库脚本
-└── docker/                        # Docker 配置文件
-```
 
 ## 团队成员与技术栈
 
@@ -109,74 +154,6 @@ A-paper-review-system/
   - Prometheus监控
   - RabbitMQ
   - Shell脚本
-
-## 技术栈详解
-
-### 后端技术栈
-```
-Spring Cloud 微服务
-├── Spring Boot 3.2.0（基础框架）
-├── Spring Cloud Gateway（网关服务）
-├── Spring Security + JWT（认证授权）
-├── Spring Cloud Config（配置中心）
-└── Spring Cloud Netflix（服务发现）
-
-数据存储与缓存
-├── MySQL 8.0（关系型数据库）
-├── Redis 6.2（缓存服务）
-├── MinIO（对象存储）
-└── MyBatis-Plus/JPA（ORM框架）
-
-消息与异步
-├── RabbitMQ 3.9（消息队列）
-└── WebSocket（实时通信）
-
-监控与日志
-├── ELK Stack（日志收集）
-├── Prometheus（监控系统）
-└── Grafana（可视化面板）
-```
-
-### 前端技术栈
-```
-核心框架
-├── Vue 3.0
-├── TypeScript
-└── Element Plus
-
-工程化工具
-├── Vite（构建工具）
-├── ESLint（代码检查）
-└── Prettier（代码格式化）
-
-状态管理
-├── Pinia（状态管理）
-└── Vue Router（路由管理）
-
-测试工具
-├── Vitest（单元测试）
-└── Cypress（E2E测试）
-```
-
-### 运维技术栈
-```
-容器化部署
-├── Docker
-└── Docker Compose
-
-持续集成/部署
-├── GitHub Actions
-└── Shell Scripts
-
-监控与日志
-├── ELK Stack
-├── Prometheus
-└── Grafana
-
-自动化运维
-├── Ansible
-└── Jenkins
-```
 
 ## 系统架构
 
@@ -325,6 +302,119 @@ docker-compose up -d
 4. 发起 Pull Request
 
 详见 [贡献指南](docs/贡献指南.md)
+
+## 模块详细说明
+## 模块详细说明
+
+### Backend Services
+### 后端服务
+
+#### Common Module 公共模块
+- Shared entities 共享实体
+- Utility classes 工具类
+- Common configurations 公共配置
+- Base exceptions 基础异常类
+
+#### Paper Service 论文服务
+- Paper submission 论文提交
+- Paper lifecycle management 论文生命周期管理
+- File storage integration 文件存储集成
+- Version control 版本控制
+
+#### Review Service 评审服务
+- Review assignment 评审分配
+- Review process management 评审流程管理
+- Feedback collection 反馈收集
+- Review statistics 评审统计
+
+#### User Service 用户服务
+- Authentication 认证
+- Authorization 授权
+- Profile management 档案管理
+- Role management 角色管理
+
+### Frontend Modules
+### 前端模块
+
+#### Paper Module 论文模块
+- Paper submission interface 论文提交界面
+- Paper list and details 论文列表和详情
+- Status tracking 状态追踪
+- File upload/download 文件上传下载
+
+#### Review Module 评审模块
+- Review dashboard 评审仪表板
+- Review form 评审表单
+- Review history 评审历史
+- Statistics visualization 统计可视化
+
+## Development Guide
+## 开发指南
+
+### Backend Development
+### 后端开发
+
+```bash
+# Start specific service 启动特定服务
+cd backend/paper-service
+mvn spring-boot:run
+
+# Run tests 运行测试
+mvn test
+
+# Package service 打包服务
+mvn package
+```
+
+### Frontend Development
+### 前端开发
+
+```bash
+# Start development server 启动开发服务器
+cd frontend
+npm run dev
+
+# Run unit tests 运行单元测试
+npm run test:unit
+
+# Build for production 生产环境构建
+npm run build
+```
+
+## API Documentation
+## API文档
+
+See [API.md](docs/API.md) for detailed API documentation.
+详细的API文档请参见 [API.md](docs/API.md)。
+
+## Database Schema
+## 数据库架构
+
+### Paper Collection 论文集合
+```typescript
+interface Paper {
+  id: string;              // Paper ID 论文ID
+  title: string;           // Paper title 论文标题
+  abstract: string;        // Abstract 摘要
+  authors: string[];       // Author list 作者列表
+  status: PaperStatus;     // Current status 当前状态
+  submissionDate: Date;    // Submission date 提交日期
+  lastModified: Date;      // Last modified date 最后修改日期
+}
+```
+
+### Review Collection 评审集合
+```typescript
+interface Review {
+  id: string;              // Review ID 评审ID
+  paperId: string;         // Referenced paper 关联论文
+  reviewerId: string;      // Reviewer ID 评审人ID
+  comments: string;        // Review comments 评审意见
+  score: number;           // Review score 评分
+  status: ReviewStatus;    // Review status 评审状态
+  createdAt: Date;        // Creation date 创建日期
+}
+```
 
 
 
