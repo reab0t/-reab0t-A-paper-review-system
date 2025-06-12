@@ -18,7 +18,8 @@
     "echarts": "^5.4.0",
     "element-plus": "^2.4.0",
     "pinia": "^2.1.0",
-    "vue": "^3.3.0"
+    "vue": "^3.3.0",
+    "vue-router": "^4.5.1"
   },
   "devDependencies": {
     "@types/node": "^20.9.0",
