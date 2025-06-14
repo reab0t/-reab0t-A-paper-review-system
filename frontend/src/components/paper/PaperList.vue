@@ -1,10 +1,10 @@
 <template>
   <div class="paper-list">
-    <h2>Papers</h2>
+    <h2>论文</h2>
     <div class="filters">
-      <input v-model="searchQuery" placeholder="Search papers..." class="search-input" />
+      <input v-model="searchQuery" placeholder="搜索论文..." class="search-input" />
       <select v-model="statusFilter" class="status-filter">
-        <option value="">All Status</option>
+        <option value="">所有状态</option>
         <option v-for="status in paperStatuses" :key="status" :value="status">
           {{ status }}
         </option>
@@ -27,22 +27,31 @@
 import { ref, computed } from 'vue'
 import { Paper, PaperStatus } from '@/modules/paper/types'
 
+// 存储所有论文数据
 const papers = ref<Paper[]>([])
+
+// 搜索关键词
 const searchQuery = ref('')
+
+// 状态筛选
 const statusFilter = ref('')
 
+// 获取所有论文状态
 const paperStatuses = Object.values(PaperStatus)
 
+// 计算过滤后的论文列表
 const filteredPapers = computed(() => {
   return papers.value.filter(paper => {
+    // 检查是否匹配搜索关键词
     const matchesSearch = paper.title.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
                          paper.abstract.toLowerCase().includes(searchQuery.value.toLowerCase())
+    // 检查是否匹配状态筛选
     const matchesStatus = !statusFilter.value || paper.status === statusFilter.value
     return matchesSearch && matchesStatus
   })
 })
 
-// TODO: Fetch papers from API
+// TODO: 从 API 获取论文数据
 </script>
 
 <style scoped>
