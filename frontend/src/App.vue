@@ -1,17 +1,12 @@
 <template>
-  <el-config-provider :locale="zhCn">
+  <div id="app">
+    <Header />
+    <Sidebar />
     <router-view />
-  </el-config-provider>
+  </div>
 </template>
 
-<script lang="ts" setup>
-import { ElConfigProvider } from 'element-plus'
-import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
+<script setup>
+import Header from './components/common/Header.vue';
+import Sidebar from './components/common/Sidebar.vue';
 </script>
-
-<style lang="scss">
-#app {
-  width: 100%;
-  height: 100%;
-}
-</style> 
