@@ -1,21 +1,30 @@
 <template>
-  <div class="sidebar">
+  <aside class="sidebar">
     <ul>
-      <li>首页</li>
-      <li>论文列表</li>
-      <li>评审管理</li>
+      <li><a href="/">首页</a></li>
+      <li><a href="/papers">论文列表</a></li>
+      <li><a href="/papers/upload">上传论文</a></li>
+      <li><a href="/reviews">评审列表</a></li>
+      <li><a href="/login">登录</a></li>
     </ul>
-  </div>
+  </aside>
 </template>
-
-<script setup>
-// 你可以在这里写逻辑
-</script>
 
 <style scoped>
 .sidebar {
   width: 200px;
   background-color: #f4f4f4;
-  padding: 10px;
+  padding: 20px;
+}
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+.sidebar li {
+  margin-bottom: 10px;
+}
+.sidebar a {
+  text-decoration: none;
+  color: #333;
 }
 </style>

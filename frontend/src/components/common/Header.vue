@@ -1,17 +1,27 @@
 <template>
-  <div class="header">
+  <header class="header">
     <h1>论文评审系统</h1>
-  </div>
+    <nav>
+      <a href="/">首页</a>
+      <a href="/papers">论文列表</a>
+      <a href="/reviews">评审列表</a>
+      <a href="/login">登录</a>
+    </nav>
+  </header>
 </template>
-
-<script setup>
-// 你可以在这里写逻辑
-</script>
 
 <style scoped>
 .header {
   background-color: #333;
   color: white;
   padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+nav a {
+  color: white;
+  margin-left: 15px;
+  text-decoration: none;
 }
 </style>

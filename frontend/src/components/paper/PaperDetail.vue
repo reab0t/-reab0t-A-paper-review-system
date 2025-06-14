@@ -1,32 +1,41 @@
-<template>
-  <div>
-    <h2>论文详情</h2>
-    <p>标题：{{ paper.title }}</p>
-    <p>作者：{{ paper.author }}</p>
-    <p>内容：{{ paper.content }}</p>
-    <el-button @click="back">返回</el-button>
-  </div>
-</template>
-
 <script setup>
 import { ref, onMounted } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 
 const route = useRoute();
-const router = useRouter();
 const paper = ref({});
 
 onMounted(() => {
-  // 通过 API 获取论文详情
+  // 模拟从 API 获取数据
+  const id = route.params.id;
   paper.value = {
-    id: route.params.id,
-    title: '论文标题',
-    author: '作者名',
-    content: '论文内容……'
+    id: id,
+    title: '示例论文标题',
+    author: '示例作者',
+    submitTime: '2024-01-01',
+    status: '待评审',
+    abstract: '这是一个示例论文摘要，描述了论文的主要内容和研究成果。'
   };
 });
-
-const back = () => {
-  router.push('/papers');
-};
 </script>
+
+<template>
+  <div class="paper-detail">
+    <h2>论文详情</h2>
+    <el-descriptions :column="1" border>
+      <el-descriptions-item label="标题">{{ paper.title }}</el-descriptions-item>
+      <el-descriptions-item label="作者">{{ paper.author }}</el-descriptions-item>
+      <el-descriptions-item label="提交时间">{{ paper.submitTime }}</el-descriptions-item>
+      <el-descriptions-item label="状态">{{ paper.status }}</el-descriptions-item>
+      <el-descriptions-item label="摘要">
+        {{ paper.abstract }}
+      </el-descriptions-item>
+    </el-descriptions>
+  </div>
+</template>
+
+<style scoped>
+.paper-detail {
+  padding: 20px;
+}
+</style>
