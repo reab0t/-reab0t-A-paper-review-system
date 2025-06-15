@@ -8,10 +8,22 @@
 .
 ├── backend/                        # 后端服务
 │   ├── common/                    # 公共工具和模型
+│   │   ├── pom.xml               # 公共模块Maven配置
 │   │   └── src/
 │   │       ├── main/
 │   │       │   ├── java/         # Java源文件
 │   │       │   └── resources/    # 配置文件
+│   ├── gateway/                   # API网关服务
+│   │   ├── pom.xml               # 网关服务Maven配置
+│   │   └── src/
+│   │       ├── main/
+│   │       │   ├── java/
+│   │       │   │   └── com/paper/review/gateway/
+│   │       │   │       ├── GatewayApplication.java    # 网关启动类
+│   │       │   │       └── config/
+│   │       │   │           └── CorsConfig.java        # 跨域配置
+│   │       │   └── resources/
+│   │       │       └── application.yml                # 网关配置文件
 │   ├── paper-service/            # 论文管理服务
 │   │   └── src/
 │   │       ├── main/
@@ -44,8 +56,57 @@
 ├── docs/                        # 文档
 │   ├── API.md                  # API文档
 │   └── development.md          # 开发指南
-└── config/                     # 配置文件
+├── config/                     # 配置文件
+│   ├── prometheus/            # Prometheus监控配置
+│   │   └── prometheus.yml    # Prometheus主配置文件
+│   └── logstash/             # Logstash日志配置
+│       ├── logstash.yml      # Logstash主配置文件
+│       └── pipeline/         # Logstash管道配置
+│           └── logstash.conf # 日志处理管道配置
+├── .github/                   # GitHub配置
+│   └── workflows/            # GitHub Actions工作流
+│       └── ci.yml           # CI/CD配置文件
+└── docker-compose.yml        # Docker编排配置文件
 ```
+
+## 新增配置文件说明
+
+### 1. Docker编排配置
+`docker-compose.yml` 包含了所有服务的容器配置：
+- Nacos：服务发现和配置中心
+- MySQL：数据库服务
+- Redis：缓存服务
+- MinIO：对象存储服务
+- RabbitMQ：消息队列服务
+- ELK：日志收集和分析
+- Prometheus + Grafana：监控系统
+
+### 2. CI/CD配置
+`.github/workflows/ci.yml` 定义了持续集成和部署流程：
+- 自动构建：前端和后端代码
+- 自动测试：单元测试和集成测试
+- 自动部署：开发环境和生产环境
+
+### 3. 监控配置
+`config/prometheus/prometheus.yml` 配置了监控目标：
+- Spring Boot应用监控
+- 服务器资源监控
+- 容器监控
+- 自定义指标采集
+
+### 4. 日志配置
+`config/logstash/` 下的配置文件：
+- `logstash.yml`：Logstash基础配置
+- `pipeline/logstash.conf`：日志处理管道配置
+  - 收集应用日志
+  - 解析日志格式
+  - 存储到Elasticsearch
+
+### 5. 网关服务
+`backend/gateway/` 下的主要文件：
+- `GatewayApplication.java`：网关启动类
+- `CorsConfig.java`：跨域配置
+- `application.yml`：网关路由和服务配置
 
 ## 技术栈
 
