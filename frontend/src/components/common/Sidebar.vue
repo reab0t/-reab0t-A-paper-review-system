@@ -6,6 +6,7 @@
       <li><a href="/papers/upload">上传论文</a></li>
       <li><a href="/reviews">评审列表</a></li>
       <li><a href="/login">登录</a></li>
+      <li><a href="/register">注册</a></li>
     </ul>
   </aside>
 </template>

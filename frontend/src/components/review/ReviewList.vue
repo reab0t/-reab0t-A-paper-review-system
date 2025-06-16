@@ -1,86 +1,87 @@
 <template>
   <div class="review-form-container">
-    <!-- 论文标题（只读） -->
-    <el-form-item label="论文标题" prop="paperTitle">
-      <el-input v-model="reviewForm.paperTitle" disabled></el-input>
-    </el-form-item>
+    <el-form ref="reviewFormRef" :model="reviewForm" :rules="rules">
+      <el-form-item label="论文标题" prop="paperTitle">
+        <el-input v-model="reviewForm.paperTitle" disabled></el-input>
+      </el-form-item>
 
-    <!-- 评审等级（五星评分） -->
-    <el-form-item label="评审等级" prop="rating">
-      <el-rate
-        v-model="reviewForm.rating"
-        :max="5"
-        show-score
-        text-color="#ff9900"
-        allow-half
-      ></el-rate>
-    </el-form-item>
+      <!-- 评审等级（五星评分） -->
+      <el-form-item label="评审等级" prop="rating">
+        <el-rate
+          v-model="reviewForm.rating"
+          :max="5"
+          show-score
+          text-color="#ff9900"
+          allow-half
+        ></el-rate>
+      </el-form-item>
 
-    <!-- 创新性评分 -->
-    <el-form-item label="创新性" prop="innovation">
-      <el-rate
-        v-model="reviewForm.innovation"
-        :max="5"
-        text-color="#ff9900"
-        allow-half
-      ></el-rate>
-    </el-form-item>
+      <!-- 创新性评分 -->
+      <el-form-item label="创新性" prop="innovation">
+        <el-rate
+          v-model="reviewForm.innovation"
+          :max="5"
+          text-color="#ff9900"
+          allow-half
+        ></el-rate>
+      </el-form-item>
 
-    <!-- 技术性评分 -->
-    <el-form-item label="技术性" prop="technicality">
-      <el-rate
-        v-model="reviewForm.technicality"
-        :max="5"
-        text-color="#ff9900"
-        allow-half
-      ></el-rate>
-    </el-form-item>
+      <!-- 技术性评分 -->
+      <el-form-item label="技术性" prop="technicality">
+        <el-rate
+          v-model="reviewForm.technicality"
+          :max="5"
+          text-color="#ff9900"
+          allow-half
+        ></el-rate>
+      </el-form-item>
 
-    <!-- 可读性评分 -->
-    <el-form-item label="可读性" prop="readability">
-      <el-rate
-        v-model="reviewForm.readability"
-        :max="5"
-        text-color="#ff9900"
-        allow-half
-      ></el-rate>
-    </el-form-item>
+      <!-- 可读性评分 -->
+      <el-form-item label="可读性" prop="readability">
+        <el-rate
+          v-model="reviewForm.readability"
+          :max="5"
+          text-color="#ff9900"
+          allow-half
+        ></el-rate>
+      </el-form-item>
 
-    <!-- 评审意见 -->
-    <el-form-item label="评审意见" prop="comments">
-      <el-input
-        v-model="reviewForm.comments"
-        type="textarea"
-        :rows="4"
-        placeholder="请输入您的评审意见"
-      ></el-input>
-    </el-form-item>
+      <!-- 评审意见 -->
+      <el-form-item label="评审意见" prop="comments">
+        <el-input
+          v-model="reviewForm.comments"
+          type="textarea"
+          :rows="4"
+          placeholder="请输入您的评审意见"
+        ></el-input>
+      </el-form-item>
 
-    <!-- 主要问题 -->
-    <el-form-item label="主要问题" prop="issues">
-      <el-input
-        v-model="reviewForm.issues"
-        type="textarea"
-        :rows="4"
-        placeholder="请列出论文的主要问题"
-      ></el-input>
-    </el-form-item>
+      <!-- 主要问题 -->
+      <el-form-item label="主要问题" prop="issues">
+        <el-input
+          v-model="reviewForm.issues"
+          type="textarea"
+          :rows="4"
+          placeholder="请列出论文的主要问题"
+        ></el-input>
+      </el-form-item>
 
-    <!-- 修改建议 -->
-    <el-form-item label="修改建议" prop="suggestions">
-      <el-input
-        v-model="reviewForm.suggestions"
-        type="textarea"
-        :rows="4"
-        placeholder="请提供修改建议"
-      ></el-input>
-    </el-form-item>
+      <!-- 修改建议 -->
+      <el-form-item label="修改建议" prop="suggestions">
+        <el-input
+          v-model="reviewForm.suggestions"
+          type="textarea"
+          :rows="4"
+          placeholder="请提供修改建议"
+        ></el-input>
+      </el-form-item>
 
-    <!-- 表单操作按钮 -->
-    <div class="form-actions">
-      <el-button @click="resetForm">重置</el-button>
-      <el-button type="primary" @click="submitReviewForm">提交评审</el-button>
-    </div>
+      <!-- 表单操作按钮 -->
+      <el-form-item>
+        <el-button @click="resetForm">重置</el-button>
+        <el-button type="primary" @click="submitReviewForm">提交评审</el-button>
+      </el-form-item>
+    </el-form>
   </div>
 </template>
 

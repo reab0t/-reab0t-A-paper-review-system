@@ -1,30 +1,32 @@
 <template>
   <div class="review-form-container">
-    <!-- 论文标题（只读） -->
-    <el-form-item label="论文标题">
-      <el-input v-model="reviewForm.title" :disabled="true" />
-    </el-form-item>
+    <el-form :model="reviewForm">
+      <!-- 论文标题（只读） -->
+      <el-form-item label="论文标题">
+        <el-input v-model="reviewForm.title" :disabled="true" />
+      </el-form-item>
 
-    <!-- 评审分数 -->
-    <el-form-item label="评审分数">
-      <el-rate v-model="reviewForm.score" :max="5" show-score />
-    </el-form-item>
+      <!-- 评审分数 -->
+      <el-form-item label="评审分数">
+        <el-rate v-model="reviewForm.score" :max="5" show-score />
+      </el-form-item>
 
-    <!-- 评审意见 -->
-    <el-form-item label="评审意见">
-      <el-input
-        v-model="reviewForm.comment"
-        type="textarea"
-        :rows="4"
-        placeholder="请输入评审意见"
-      />
-    </el-form-item>
+      <!-- 评审意见 -->
+      <el-form-item label="评审意见">
+        <el-input
+          v-model="reviewForm.comment"
+          type="textarea"
+          :rows="4"
+          placeholder="请输入评审意见"
+        />
+      </el-form-item>
 
-    <!-- 提交按钮 -->
-    <el-form-item>
-      <el-button type="primary" @click="handleSubmit">提交评审</el-button>
-      <el-button @click="backToList">返回列表</el-button>
-    </el-form-item>
+      <!-- 提交按钮 -->
+      <el-form-item>
+        <el-button type="primary" @click="handleSubmit">提交评审</el-button>
+        <el-button @click="backToList">返回列表</el-button>
+      </el-form-item>
+    </el-form>
   </div>
 </template>
 

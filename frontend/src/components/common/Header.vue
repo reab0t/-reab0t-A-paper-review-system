@@ -6,6 +6,7 @@
       <a href="/papers">论文列表</a>
       <a href="/reviews">评审列表</a>
       <a href="/login">登录</a>
+      <a href="/register">注册</a>
     </nav>
   </header>
 </template>
