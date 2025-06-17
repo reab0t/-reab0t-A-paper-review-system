@@ -1,209 +1,302 @@
-# IDEA 开发环境配置指南
+# IDEA 配置指南
 
-## 1. 基础设置
+## 目录
+- [基础设置](#基础设置)
+- [插件安装](#插件安装)
+- [代码模板](#代码模板)
+- [快捷键设置](#快捷键设置)
+- [版本控制](#版本控制)
+- [调试配置](#调试配置)
+- [代码规范](#代码规范)
 
-### 1.1 推荐版本
-- IntelliJ IDEA 2023.3 或更高版本
-- Ultimate Edition（推荐，支持更多企业级特性）
+## 基础设置
 
-### 1.2 必要插件
-1. **Spring Boot Assistant**
-   - Spring Boot 配置文件提示
-   - Spring Boot Actuator 支持
-   - 自动配置报告
+### 1. 项目JDK配置
+1. 打开 `File -> Project Structure`
+2. 在 `Project` 选项中设置：
+   - Project SDK: JDK 21
+   - Project language level: 21
+   - Project compiler output: `项目路径/target`
 
-2. **Lombok Plugin**
-   - 自动处理 Lombok 注解
-   - 代码简化支持
+### 2. Maven配置
+1. 打开 `File -> Settings -> Build, Execution, Deployment -> Build Tools -> Maven`
+2. 设置：
+   - Maven home path: `Maven安装路径`
+   - User settings file: `settings.xml路径`
+   - Local repository: `本地仓库路径`
 
-3. **MapStruct Support**
-   - MapStruct 对象映射支持
-   - 自动补全和错误检测
-
-4. **SonarLint**
-   - 实时代码质量检查
-   - 安全漏洞检测
-   - 代码规范提示
-
-5. **Git Integration**
-   - Git 版本控制集成
-   - 分支管理
-   - 提交历史查看
-
-6. **Maven Helper**
-   - 依赖冲突检测
-   - 依赖树可视化
-   - 多模块项目管理
-
-7. **JPA Buddy**
-   - JPA 实体类生成
-   - 数据库表映射
-   - Repository 方法生成
-
-8. **Database Navigator**
-   - 数据库连接管理
-   - SQL 编辑器
-   - 表结构可视化
-
-### 1.3 代码风格设置
-1. **导入 Google Java Style**
-   - 下载 `intellij-java-google-style.xml`
-   - 导入到 IDEA 设置中
-   - 设置为项目默认格式化规则
-
-2. **编码设置**
-   ```
-   File -> Settings -> Editor -> File Encodings
+### 3. 编码设置
+1. 打开 `File -> Settings -> Editor -> File Encodings`
+2. 设置：
    - Global Encoding: UTF-8
    - Project Encoding: UTF-8
    - Default encoding for properties files: UTF-8
-   ```
+   - 勾选 `Transparent native-to-ascii conversion`
 
-3. **自动导入设置**
-   ```
-   File -> Settings -> Editor -> General -> Auto Import
-   - Add unambiguous imports on the fly: 启用
-   - Optimize imports on the fly: 启用
-   ```
+### 4. 自动导入设置
+1. 打开 `File -> Settings -> Editor -> General -> Auto Import`
+2. 勾选：
+   - `Add unambiguous imports on the fly`
+   - `Optimize imports on the fly`
 
-## 2. 项目配置
+## 插件安装
 
-### 2.1 JDK 配置
-1. 配置 JDK 21
-   ```
-   File -> Project Structure -> Project
-   - Project SDK: 21 (Eclipse Temurin version)
-   - Project language level: 21
-   ```
+### 1. 必装插件
+- Lombok：简化Java代码
+- Spring Boot Assistant：Spring Boot开发助手
+- Maven Helper：Maven依赖管理
+- SonarLint：代码质量检查
+- GitToolBox：Git增强工具
+- Alibaba Java Coding Guidelines：阿里巴巴Java开发规范
 
-2. 模块 SDK 设置
-   ```
-   File -> Project Structure -> Modules
-   - 确保所有模块使用 JDK 21
-   ```
+### 2. 推荐插件
+- JRebel：热部署工具
+- MyBatisX：MyBatis增强工具
+- RestfulTool：RESTful接口开发工具
+- Translation：翻译插件
+- Key Promoter X：快捷键提示
+- Rainbow Brackets：彩虹括号
 
-### 2.2 Maven 配置
-1. **Maven 设置**
-   ```
-   File -> Settings -> Build, Execution, Deployment -> Build Tools -> Maven
-   - Maven home path: 配置 Maven 3.9.10
-   - User settings file: 指向自定义 settings.xml
-   - Local repository: 配置本地仓库路径
-   ```
+### 3. 插件配置
+```
+# SonarLint配置
+1. 打开 Settings -> Tools -> SonarLint
+2. 配置SonarQube服务器连接
+3. 设置自动分析规则
 
-2. **Runner 配置**
-   ```
-   - VM Options: -Xmx2g -XX:MaxPermSize=512m
-   - JRE: JDK 21
-   ```
+# Lombok配置
+1. 打开 Settings -> Build -> Compiler -> Annotation Processors
+2. 勾选 Enable annotation processing
 
-### 2.3 Spring Boot 配置
-1. **运行配置**
-   - 为每个微服务创建单独的运行配置
-   - 配置环境变量和 JVM 参数
-   - 设置正确的工作目录
+# JRebel配置
+1. 激活JRebel
+2. 配置要监控的目录
+3. 设置自动编译选项
+```
 
-2. **开发工具配置**
-   ```
-   - 启用 Spring Boot 开发工具
-   - 配置自动重启
-   - 设置 LiveReload
-   ```
+## 代码模板
 
-## 3. 调试配置
+### 1. 类注释模板
+```java
+/**
+ * ${NAME}
+ *
+ * @author ${USER}
+ * @version ${VERSION}
+ * @date ${DATE} ${TIME}
+ */
+```
 
-### 3.1 远程调试
-1. **配置远程调试连接**
-   ```
-   Run -> Edit Configurations -> + -> Remote JVM Debug
+### 2. 方法注释模板
+```java
+/**
+ * ${DESCRIPTION}
+ *
+ * @param ${PARAM} ${PARAM_DESC}
+ * @return ${RETURN_DESC}
+ * @throws ${THROWS} ${THROWS_DESC}
+ */
+```
+
+### 3. Live Templates
+```java
+// 测试方法模板
+@Test
+public void test$METHOD$() {
+    // Given
+    $GIVEN$
+    
+    // When
+    $WHEN$
+    
+    // Then
+    $THEN$
+}
+
+// 日志模板
+private static final Logger log = LoggerFactory.getLogger($CLASS$.class);
+```
+
+## 快捷键设置
+
+### 1. 常用快捷键
+```
+# 编辑
+- Ctrl + Space：基本代码补全
+- Ctrl + Shift + Space：智能代码补全
+- Alt + Insert：生成代码
+- Ctrl + O：重写方法
+- Ctrl + I：实现方法
+- Ctrl + Alt + L：格式化代码
+- Ctrl + Alt + O：优化导入
+
+# 导航
+- Ctrl + N：查找类
+- Ctrl + Shift + N：查找文件
+- Ctrl + Alt + B：跳转到实现
+- Ctrl + B：跳转到声明
+- Alt + F7：查找使用
+- Ctrl + F12：文件结构
+
+# 重构
+- Shift + F6：重命名
+- Ctrl + Alt + M：提取方法
+- Ctrl + Alt + V：提取变量
+- Ctrl + Alt + C：提取常量
+- Ctrl + Alt + F：提取字段
+
+# 调试
+- F7：步入
+- F8：步过
+- F9：恢复程序
+- Alt + F8：评估表达式
+```
+
+### 2. 自定义快捷键
+```
+# 添加自定义快捷键
+1. 打开 Settings -> Keymap
+2. 搜索需要设置的操作
+3. 右键选择 Add Keyboard Shortcut
+4. 设置快捷键组合
+```
+
+## 版本控制
+
+### 1. Git配置
+```
+# 基本配置
+1. 打开 Settings -> Version Control -> Git
+2. 设置Git可执行文件路径
+3. 配置GitHub账号
+
+# 提交模板
+1. 打开 Settings -> Version Control -> Commit
+2. 设置提交消息模板：
+   feat(scope): description
+   
+   [body]
+   
+   [footer]
+```
+
+### 2. 分支管理
+```
+# 分支操作
+1. Alt + 9：打开Git工具窗口
+2. 右键分支进行操作：
+   - New Branch：新建分支
+   - Checkout：切换分支
+   - Merge：合并分支
+   - Delete：删除分支
+```
+
+## 调试配置
+
+### 1. 远程调试
+```
+# 配置远程调试
+1. 打开 Run -> Edit Configurations
+2. 点击 + 号，选择 Remote JVM Debug
+3. 配置：
    - Name: Remote Debug
-   - Host: localhost
-   - Port: 5005
-   ```
+   - Host: 远程服务器IP
+   - Port: 调试端口
+```
 
-2. **Docker 环境调试**
-   - 配置 Docker 容器远程调试端口
-   - 设置断点和调试参数
+### 2. Spring Boot调试
+```
+# 配置Spring Boot应用
+1. 打开 Run -> Edit Configurations
+2. 点击 + 号，选择 Spring Boot
+3. 配置：
+   - Main class: 启动类
+   - Program arguments: 启动参数
+   - Environment variables: 环境变量
+```
 
-### 3.2 HTTP 客户端
-1. **配置 HTTP Client**
-   - 创建环境配置文件
-   - 设置变量和认证信息
-   - 保存常用请求
+### 3. 断点设置
+```
+# 断点类型
+- Line Breakpoint：行断点
+- Method Breakpoint：方法断点
+- Exception Breakpoint：异常断点
+- Field Watchpoint：字段断点
 
-2. **测试端点**
-   - 创建 HTTP 请求文件
-   - 设置环境变量
-   - 运行和调试请求
+# 断点条件
+1. 右键断点
+2. 设置条件：
+   - Condition：条件表达式
+   - Log：日志输出
+   - Pass count：通过次数
+```
 
-## 4. 版本控制配置
+## 代码规范
 
-### 4.1 Git 设置
-1. **配置 Git**
-   ```
-   File -> Settings -> Version Control -> Git
-   - Path to Git executable: 配置 Git 路径
-   - 配置 GitHub 账号
-   ```
+### 1. 代码风格
+```
+# 导入代码风格
+1. 打开 Settings -> Editor -> Code Style
+2. 选择 Import Scheme
+3. 导入团队统一的代码风格文件
 
-2. **提交模板**
-   - 配置提交消息模板
-   - 设置提交前检查项
-   - 启用 Commit 钩子
+# 常用设置
+- 缩进：4个空格
+- 行宽：120字符
+- 换行符：Unix格式
+```
 
-### 4.2 代码审查
-1. **配置 Code Review 工具**
-   - 启用 Space/Code With Me
-   - 设置代码审查提醒
-   - 配置审查规则
+### 2. 检查配置
+```
+# 配置检查规则
+1. 打开 Settings -> Editor -> Inspections
+2. 配置检查级别：
+   - ERROR：错误
+   - WARNING：警告
+   - WEAK WARNING：弱警告
+   - INFO：信息
 
-## 5. 性能优化
+# 自定义规则
+1. 创建自定义检查配置
+2. 设置规则范围和严重程度
+3. 导出配置文件共享
+```
 
-### 5.1 IDEA 性能设置
-1. **内存设置**
-   ```
-   Help -> Change Memory Settings
-   - Maximum heap size: 4096 MB（或更高）
-   ```
+### 3. 实时模板
+```
+# 配置实时模板
+1. 打开 Settings -> Editor -> Live Templates
+2. 添加自定义模板：
+   - Abbreviation：缩写
+   - Description：描述
+   - Template text：模板内容
+   - Applicable contexts：适用上下文
+```
 
-2. **缓存和索引**
-   - 定期清理系统缓存
-   - 优化索引设置
-   - 配置文件监视限制
+## 性能优化
 
-### 5.2 编译设置
-1. **Compiler 配置**
-   ```
-   File -> Settings -> Build, Execution, Deployment -> Compiler
-   - Build process heap size: 2048
-   - Shared build process VM options: -Xmx2g
-   ```
+### 1. 内存设置
+```
+# 修改IDEA内存
+1. 打开 Help -> Edit Custom VM Options
+2. 设置参数：
+   -Xms1024m
+   -Xmx4096m
+   -XX:ReservedCodeCacheSize=512m
+```
 
-2. **并行编译**
-   - 启用并行编译
-   - 配置编译线程数
-   - 设置自动构建选项
+### 2. 缓存清理
+```
+# 清理系统缓存
+1. 打开 File -> Invalidate Caches
+2. 选择要清理的缓存类型
+3. 重启IDEA
+```
 
-## 6. 团队共享设置
-
-### 6.1 共享配置
-1. **导出设置**
-   - 代码风格设置
-   - 检查配置
-   - 运行配置
-
-2. **版本控制**
-   - `.idea` 文件夹配置
-   - 工作空间配置
-   - 运行配置
-
-### 6.2 团队规范
-1. **代码模板**
-   - 类文件模板
-   - 方法注释模板
-   - 版权信息模板
-
-2. **检查配置**
-   - 启用团队统一的代码检查
-   - 配置警告级别
-   - 设置排除规则 
+### 3. 插件管理
+```
+# 优化插件
+1. 禁用不常用插件
+2. 及时更新插件版本
+3. 删除无用插件
+``` 
