@@ -1,0 +1,20 @@
+groups:
+- name: paper-review-alerts
+  rules:
+  - alert: HighCPUUsage
+    expr: 100 - (avg by (instance) (node_cpu_seconds_total{mode="idle"}[5m]) / avg by (instance) (node_cpu_seconds_total[5m]) * 100) > 80
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Instance {{ $labels.instance }} high CPU usage"
+      description: "CPU usage is above 80% (current: {{ $value }})"
+
+  - alert: MemoryUsageCritical
+    expr: (node_memory_MemTotal_bytes - node_memory_MemFree_bytes - node_memory_Buffers_bytes - node_memory_Cached_bytes) / node_memory_MemTotal_bytes * 100 > 90
+    for: 10m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Instance {{ $labels.instance }} memory critical"
+      description: "Memory usage is above 90% (current: {{ $value }})"
