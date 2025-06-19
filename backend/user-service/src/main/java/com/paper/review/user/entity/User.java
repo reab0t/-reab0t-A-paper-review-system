@@ -75,7 +75,7 @@ public class User extends BaseEntity {
     private String avatar;
 
     /**
-     * 角色
+     * 用户角色
      */
     @NotBlank(message = "角色不能为空")
     @Column(nullable = false, length = 20)
@@ -88,4 +88,16 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     @TableField("status")
     private Integer status = 1;
+
+    public String getUsername() {
+        return this.username;
+    }
+
+    public String getPassword() {
+        return this.password;
+    }
+
+    public String getRole() {
+        return this.role;
+    }
 } 

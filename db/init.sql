@@ -93,4 +93,7 @@ ADD CONSTRAINT `fk_notification_user` FOREIGN KEY (`user_id`) REFERENCES `user` 
 
 -- 插入管理员账号
 INSERT INTO `user` (`username`, `password`, `email`, `real_name`, `role`, `status`)
-VALUES ('admin', '$2a$10$X/hX6J2POXuZKzJqB7V48O9FGS3XqZoXQV3zqUlNeONPEYI0iZK2a', 'admin@example.com', '系统管理员', 'ADMIN', 1); 
+VALUES ('admin', '$2a$10$X/hX6J2POXuZKzJqB7V48O9FGS3XqZoXQV3zqUlNeONPEYI0iZK2a', 'admin@example.com', '系统管理员', 'ADMIN', 1);
+
+FLUSH PRIVILEGES;
+ALTER USER 'root'@'localhost' IDENTIFIED BY '123456'; 

@@ -17,11 +17,14 @@ scrape_configs:
     static_configs:
       - targets: ['localhost:9090']
 
-  - job_name: 'spring-actuator'
+  - job_name: 'spring-boot-services'
     metrics_path: '/actuator/prometheus'
-    scrape_interval: 5s
     static_configs:
-      - targets: ['gateway:8080', 'user-service:8081', 'paper-service:8082', 'review-service:8083']
+      - targets: ['user-service:8081', 'paper-service:8082', 'review-service:8083', 'gateway:8080']
+
+  - job_name: 'node'
+    static_configs:
+      - targets: ['localhost:9100']
 
   - job_name: 'node-exporter'
     static_configs:

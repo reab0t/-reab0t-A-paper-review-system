@@ -1,4 +1,5 @@
 <template>
+  <NotificationBar ref="notificationBarRef" />
   <div id="app">
     <Header />
     <div class="main-content">
@@ -8,9 +9,13 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { ref, onMounted } from 'vue'
 import Header from './components/common/Header.vue'
 import Sidebar from './components/common/Sidebar.vue'
+import NotificationBar from '@/components/common/NotificationBar.vue'
+
+const notificationBarRef = ref()
 </script>
 
 <style scoped>

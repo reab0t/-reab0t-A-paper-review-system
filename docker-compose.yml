@@ -6,25 +6,35 @@ services:
     image: nacos/nacos-server:v2.2.3
     container_name: nacos
     environment:
-      - MODE=standalone
+      MODE: standalone
+      SPRING_DATASOURCE_PLATFORM: mysql
+      MYSQL_SERVICE_HOST: mysql
+      MYSQL_SERVICE_DB_NAME: paper_review
+      MYSQL_SERVICE_PORT: 3306
+      MYSQL_SERVICE_USER: root
+      MYSQL_SERVICE_PASSWORD: root
     ports:
       - "8848:8848"
-      - "9848:9848"
     volumes:
       - ./data/nacos:/home/nacos/data
       - ./logs/nacos:/home/nacos/logs
+    depends_on:
+      - mysql
+    restart: always
 
   # MySQL数据库
   mysql:
     image: mysql:8.0
     container_name: mysql
     environment:
-      - MYSQL_ROOT_PASSWORD=root123
-      - MYSQL_DATABASE=paper_review
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: paper_review
     ports:
       - "3306:3306"
     volumes:
       - ./data/mysql:/var/lib/mysql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: always
 
   # Redis缓存
   redis:
@@ -34,20 +44,22 @@ services:
       - "6379:6379"
     volumes:
       - ./data/redis:/data
+    restart: always
 
   # MinIO对象存储
   minio:
-    image: minio/minio
+    image: minio/minio:latest
     container_name: minio
-    command: server /data --console-address ":9001"
     environment:
-      - MINIO_ROOT_USER=minioadmin
-      - MINIO_ROOT_PASSWORD=minioadmin
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    command: server /data --console-address ":9001"
     ports:
       - "9000:9000"
       - "9001:9001"
     volumes:
       - ./data/minio:/data
+    restart: always
 
   # RabbitMQ消息队列
   rabbitmq:
@@ -58,6 +70,7 @@ services:
       - "15672:15672"
     volumes:
       - ./data/rabbitmq:/var/lib/rabbitmq
+    restart: always
 
   # Elasticsearch
   elasticsearch:
@@ -116,6 +129,61 @@ services:
       - "3000:3000"
     volumes:
       - ./data/grafana:/var/lib/grafana
+
+  user-service:
+    build: ./backend/user-service
+    container_name: user-service
+    ports:
+      - "8081:8081"
+    depends_on:
+      - mysql
+      - redis
+      - nacos
+    restart: always
+
+  paper-service:
+    build: ./backend/paper-service
+    container_name: paper-service
+    ports:
+      - "8082:8082"
+    depends_on:
+      - mysql
+      - redis
+      - nacos
+      - minio
+    restart: always
+
+  review-service:
+    build: ./backend/review-service
+    container_name: review-service
+    ports:
+      - "8083:8083"
+    depends_on:
+      - mysql
+      - redis
+      - nacos
+      - rabbitmq
+    restart: always
+
+  gateway:
+    build: ./backend/gateway
+    container_name: gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - user-service
+      - paper-service
+      - review-service
+    restart: always
+
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - gateway
+    restart: always
 
 # 自定义网络配置
 networks:

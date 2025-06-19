@@ -128,4 +128,13 @@ export function download(url: string, params?: object): Promise<Blob> {
   });
 }
 
+function showNotification(msg: string, type: string = 'error') {
+  const container = document.createElement('div')
+  document.body.appendChild(container)
+  const vnode = h(NotificationBar)
+  render(vnode, container)
+  vnode.component?.exposed?.show(msg, type)
+  setTimeout(() => document.body.removeChild(container), 3500)
+}
+
 export default service;
