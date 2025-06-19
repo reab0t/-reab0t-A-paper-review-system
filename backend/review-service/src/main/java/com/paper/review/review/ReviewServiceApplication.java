@@ -1,11 +1,11 @@
-package com.paper.review.paper;
+package com.paper.review.review;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class PaperServiceApplication {
+public class ReviewServiceApplication {
     public static void main(String[] args) {
-        SpringApplication.run(PaperServiceApplication.class, args);
+        SpringApplication.run(ReviewServiceApplication.class, args);
     }
 } 

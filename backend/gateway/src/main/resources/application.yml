@@ -4,6 +4,8 @@ server:
 
 # Spring配置
 spring:
+  config:
+    import: optional:nacos:
   application:
     name: gateway  # 服务名称
   cloud:
