@@ -2,11 +2,11 @@
   <header class="header">
     <h1>论文评审系统</h1>
     <nav>
-      <a href="/">首页</a>
-      <a href="/papers">论文列表</a>
-      <a href="/reviews">评审列表</a>
-      <a href="/login">登录</a>
-      <a href="/register">注册</a>
+      <router-link to="/">首页</router-link>
+      <router-link to="/papers">论文列表</router-link>
+      <router-link to="/reviews">评审列表</router-link>
+      <router-link to="/login">登录</router-link>
+      <router-link to="/register">注册</router-link>
     </nav>
   </header>
 </template>
@@ -24,5 +24,9 @@ nav a {
   color: white;
   margin-left: 15px;
   text-decoration: none;
+}
+nav a.router-link-active {
+  color: #409eff;
+  font-weight: bold;
 }
 </style>

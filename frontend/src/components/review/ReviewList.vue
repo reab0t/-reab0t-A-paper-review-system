@@ -1,197 +1,183 @@
 <template>
-  <div class="review-form-container">
-    <el-form ref="reviewFormRef" :model="reviewForm" :rules="rules">
-      <el-form-item label="论文标题" prop="paperTitle">
-        <el-input v-model="reviewForm.paperTitle" disabled></el-input>
-      </el-form-item>
+  <div class="review-list-container">
+    <h2>评审列表</h2>
+    
+    <!-- 筛选器 -->
+    <div class="filters">
+      <el-input
+        v-model="searchQuery"
+        placeholder="搜索论文标题..."
+        style="width: 300px; margin-right: 16px;"
+      />
+      <el-select v-model="statusFilter" placeholder="选择状态" style="width: 150px;">
+        <el-option label="全部" value="" />
+        <el-option label="待评审" value="PENDING" />
+        <el-option label="评审中" value="IN_PROGRESS" />
+        <el-option label="已完成" value="COMPLETED" />
+      </el-select>
+    </div>
 
-      <!-- 评审等级（五星评分） -->
-      <el-form-item label="评审等级" prop="rating">
-        <el-rate
-          v-model="reviewForm.rating"
-          :max="5"
-          show-score
-          text-color="#ff9900"
-          allow-half
-        ></el-rate>
-      </el-form-item>
+    <!-- 评审列表 -->
+    <el-table :data="filteredReviews" style="width: 100%; margin-top: 20px;">
+      <el-table-column prop="paperTitle" label="论文标题" min-width="200" />
+      <el-table-column prop="author" label="作者" width="120" />
+      <el-table-column prop="status" label="状态" width="100">
+        <template #default="scope">
+          <el-tag :type="getStatusType(scope.row.status)">
+            {{ getStatusText(scope.row.status) }}
+          </el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column prop="assignDate" label="分配时间" width="150" />
+      <el-table-column prop="deadline" label="截止时间" width="150" />
+      <el-table-column label="操作" width="200" fixed="right">
+        <template #default="scope">
+          <el-button 
+            size="small" 
+            type="primary" 
+            @click="startReview(scope.row)"
+            v-if="scope.row.status === 'PENDING'"
+          >
+            开始评审
+          </el-button>
+          <el-button 
+            size="small" 
+            type="success" 
+            @click="viewReview(scope.row)"
+            v-if="scope.row.status === 'COMPLETED'"
+          >
+            查看评审
+          </el-button>
+          <el-button 
+            size="small" 
+            @click="continueReview(scope.row)"
+            v-if="scope.row.status === 'IN_PROGRESS'"
+          >
+            继续评审
+          </el-button>
+        </template>
+      </el-table-column>
+    </el-table>
 
-      <!-- 创新性评分 -->
-      <el-form-item label="创新性" prop="innovation">
-        <el-rate
-          v-model="reviewForm.innovation"
-          :max="5"
-          text-color="#ff9900"
-          allow-half
-        ></el-rate>
-      </el-form-item>
-
-      <!-- 技术性评分 -->
-      <el-form-item label="技术性" prop="technicality">
-        <el-rate
-          v-model="reviewForm.technicality"
-          :max="5"
-          text-color="#ff9900"
-          allow-half
-        ></el-rate>
-      </el-form-item>
-
-      <!-- 可读性评分 -->
-      <el-form-item label="可读性" prop="readability">
-        <el-rate
-          v-model="reviewForm.readability"
-          :max="5"
-          text-color="#ff9900"
-          allow-half
-        ></el-rate>
-      </el-form-item>
-
-      <!-- 评审意见 -->
-      <el-form-item label="评审意见" prop="comments">
-        <el-input
-          v-model="reviewForm.comments"
-          type="textarea"
-          :rows="4"
-          placeholder="请输入您的评审意见"
-        ></el-input>
-      </el-form-item>
-
-      <!-- 主要问题 -->
-      <el-form-item label="主要问题" prop="issues">
-        <el-input
-          v-model="reviewForm.issues"
-          type="textarea"
-          :rows="4"
-          placeholder="请列出论文的主要问题"
-        ></el-input>
-      </el-form-item>
-
-      <!-- 修改建议 -->
-      <el-form-item label="修改建议" prop="suggestions">
-        <el-input
-          v-model="reviewForm.suggestions"
-          type="textarea"
-          :rows="4"
-          placeholder="请提供修改建议"
-        ></el-input>
-      </el-form-item>
-
-      <!-- 表单操作按钮 -->
-      <el-form-item>
-        <el-button @click="resetForm">重置</el-button>
-        <el-button type="primary" @click="submitReviewForm">提交评审</el-button>
-      </el-form-item>
-    </el-form>
+    <!-- 分页 -->
+    <div class="pagination">
+      <el-pagination
+        v-model:current-page="currentPage"
+        v-model:page-size="pageSize"
+        :page-sizes="[10, 20, 50, 100]"
+        :total="total"
+        layout="total, sizes, prev, pager, next, jumper"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import { useReviewStore } from '@/stores/review';
+import { ref, computed, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+import { getReviews } from '@/api/review';
 import { ElMessage } from 'element-plus';
 
-// 引入API接口
-import { submitReview } from '@/api/review';
-
-// 定义表单数据
-const reviewForm = ref({
-  paperId: null,
-  paperTitle: '',
-  rating: 0,
-  innovation: 0,
-  technicality: 0,
-  readability: 0,
-  comments: '',
-  issues: '',
-  suggestions: '',
-});
-
-// 表单验证规则
-const rules = {
-  paperTitle: [{ required: true, message: '请输入论文标题', trigger: 'blur' }],
-  rating: [{ required: true, message: '请选择评审等级', trigger: 'change' }],
-  innovation: [{ required: true, message: '请评价创新性', trigger: 'change' }],
-  technicality: [{ required: true, message: '请评价技术性', trigger: 'change' }],
-  readability: [{ required: true, message: '请评价可读性', trigger: 'change' }],
-  comments: [{ required: true, message: '请输入评审意见', trigger: 'blur' }],
-};
-
-// 引用表单
-const reviewFormRef = ref(null);
-
-// 获取路由和路由器实例
-const route = useRoute();
 const router = useRouter();
 
-// 获取评审状态管理
-const reviewStore = useReviewStore();
+// 数据
+const reviews = ref([]);
+const searchQuery = ref('');
+const statusFilter = ref('');
+const currentPage = ref(1);
+const pageSize = ref(10);
+const total = ref(0);
 
-// 组件挂载时执行
-onMounted(() => {
-  // 从路由参数获取论文ID
-  const paperId = route.params.id;
-  if (paperId) {
-    reviewForm.value.paperId = paperId;
-    // 这里可以添加加载论文标题的逻辑
-    // 例如：调用API获取论文详情并设置reviewForm.value.paperTitle
-  }
+// 计算过滤后的评审列表
+const filteredReviews = computed(() => {
+  return reviews.value.filter(review => {
+    const matchesSearch = review.paperTitle.toLowerCase().includes(searchQuery.value.toLowerCase());
+    const matchesStatus = !statusFilter.value || review.status === statusFilter.value;
+    return matchesSearch && matchesStatus;
+  });
 });
 
-// 提交评审
-const submitReviewForm = async () => {
+// 获取状态类型
+const getStatusType = (status) => {
+  const types = {
+    'PENDING': 'warning',
+    'IN_PROGRESS': 'primary',
+    'COMPLETED': 'success',
+    'REJECTED': 'danger'
+  };
+  return types[status] || 'info';
+};
+
+// 获取状态文本
+const getStatusText = (status) => {
+  const texts = {
+    'PENDING': '待评审',
+    'IN_PROGRESS': '评审中',
+    'COMPLETED': '已完成',
+    'REJECTED': '已拒绝'
+  };
+  return texts[status] || status;
+};
+
+// 开始评审
+const startReview = (review) => {
+  router.push(`/reviews/new?paperId=${review.paperId}`);
+};
+
+// 查看评审
+const viewReview = (review) => {
+  router.push(`/reviews/${review.id}`);
+};
+
+// 继续评审
+const continueReview = (review) => {
+  router.push(`/reviews/new?paperId=${review.paperId}&reviewId=${review.id}`);
+};
+
+// 分页处理
+const handleSizeChange = (val) => {
+  pageSize.value = val;
+  loadReviews();
+};
+
+const handleCurrentChange = (val) => {
+  currentPage.value = val;
+  loadReviews();
+};
+
+// 加载评审数据
+const loadReviews = async () => {
   try {
-    // 验证表单
-    await reviewFormRef.value.validate();
-
-    // 调用API提交评审
-    const response = await submitReview(reviewForm.value);
-
-    // 提交成功
-    ElMessage.success('评审提交成功！');
-
-    // 更新store中的评审数据
-    reviewStore.addReview(response.data);
-
-    // 返回评审列表
-    router.push('/reviews');
+    const response = await getReviews();
+    reviews.value = response.data || [];
+    total.value = reviews.value.length;
   } catch (error) {
-    console.error('提交评审失败:', error);
-    ElMessage.error('提交评审失败，请重试！');
+    console.error('加载评审列表失败:', error);
+    ElMessage.error('加载评审列表失败');
   }
 };
 
-// 重置表单
-const resetForm = () => {
-  reviewFormRef.value.resetFields();
-};
+onMounted(() => {
+  loadReviews();
+});
 </script>
 
 <style scoped>
-.review-form-container {
+.review-list-container {
   padding: 20px;
-  background-color: #f5f7fa;
-  border-radius: 4px;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
 }
 
-.review-form {
-  margin-top: 20px;
-}
-
-.form-actions {
-  margin-top: 30px;
+.filters {
   display: flex;
-  justify-content: flex-end;
-  gap: 10px;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
-.el-rate {
-  display: block;
-  margin-top: 10px;
-}
-
-textarea {
-  resize: vertical;
+.pagination {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
 }
 </style>
